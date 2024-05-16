@@ -45,4 +45,3 @@ AND d.continent IS NOT NULL
 GROUP BY v.location, v.handwashing_facilities
 GO
 
-
