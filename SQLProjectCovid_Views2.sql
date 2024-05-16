@@ -30,8 +30,8 @@ GO
 
 CREATE VIEW Cumulative_vaccinations AS
 SELECT date, new_vaccinations, 
-		sum(new_vaccinations) OVER (ORDER BY date ROWS UNBOUNDED PRECEDING) AS cumulative_vaccinations,
-		people_fully_vaccinated
+		SUM(new_vaccinations) OVER (ORDER BY date ROWS UNBOUNDED PRECEDING) AS cumulative_vaccinations,
+		SUM(people_fully_vaccinated) OVER (ORDER BY date ROWS UNBOUNDED PRECEDING) AS people_fully_vaccinated
 FROM CovidVaccinations 
 WHERE location = 'World'
 GO
@@ -45,6 +45,12 @@ GO
 CREATE VIEW Total_cases AS
 SELECT MAX(CAST(total_cases AS INT)) AS cases_count
 FROM CovidDeaths
+WHERE location = 'World'
+GO
+
+CREATE VIEW Total_vaccinations AS
+SELECT MAX(total_vaccinations) AS vaccinations_count
+FROM CovidVaccinations
 WHERE location = 'World'
 GO
 
@@ -73,3 +79,19 @@ WHERE location IN ('High income', 'Low income', 'Lower middle income', 'Upper mi
 GROUP BY location
 GO
 
+CREATE VIEW Total_cases_location AS
+SELECT location, 
+MAX(CAST(total_cases AS INT)) AS cases_count
+FROM CovidDeaths
+WHERE location NOT IN ('Africa', 'Asia', 'Europe', 'North America', 'South America', 'Australia', 'World', 
+'High income', 'Low income', 'Lower middle income', 'Upper middle income', 'Oceania')
+GROUP BY location
+GO
+
+CREATE VIEW Total_cases_continent AS
+SELECT location, 
+MAX(CAST(total_cases AS INT)) AS cases_count
+FROM CovidDeaths
+WHERE location IN ('Africa', 'Asia', 'Europe', 'North America', 'South America', 'Australia', 'Oceania')
+GROUP BY location
+GO

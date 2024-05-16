@@ -20,7 +20,8 @@ UPDATE CovidVaccinations
 SET 
     total_vaccinations = CASE WHEN ISNUMERIC(total_vaccinations) = 1 THEN total_vaccinations ELSE NULL END,
     new_vaccinations = CASE WHEN ISNUMERIC(new_vaccinations) = 1 THEN new_vaccinations ELSE NULL END,
-    people_vaccinated = CASE WHEN ISNUMERIC(people_vaccinated) = 1 THEN people_vaccinated ELSE NULL END
+    people_vaccinated = CASE WHEN ISNUMERIC(people_vaccinated) = 1 THEN people_vaccinated ELSE NULL END,
+	people_fully_vaccinated = CASE WHEN ISNUMERIC(people_fully_vaccinated) = 1 THEN people_fully_vaccinated ELSE NULL END
 
 
 -- Alter column data types
@@ -50,6 +51,8 @@ ALTER TABLE CovidVaccinations
 ALTER COLUMN new_vaccinations DECIMAL(18,2) NULL;
 ALTER TABLE CovidVaccinations
 ALTER COLUMN people_vaccinated DECIMAL(18,2) NULL;
+ALTER TABLE CovidVaccinations
+ALTER COLUMN people_fully_vaccinated DECIMAL(18,2) NULL;
 
 COMMIT TRANSACTION;
-GO
+
