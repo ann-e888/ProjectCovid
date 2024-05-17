@@ -36,6 +36,14 @@ FROM CovidVaccinations
 WHERE location = 'World'
 GO
 
+CREATE VIEW Cumulative_vaccinations_continent AS
+SELECT location, date, new_vaccinations, 
+		SUM(new_vaccinations) OVER (PARTITION BY location ORDER BY date) AS cumulative_vaccinations,
+		SUM(people_fully_vaccinated) OVER (PARTITION BY location ORDER BY date) AS people_fully_vaccinated
+FROM CovidVaccinations 
+WHERE location IN ('Africa', 'Asia', 'Europe', 'North America', 'South America', 'Australia')
+GO
+
 CREATE VIEW Total_deaths AS
 SELECT MAX(CAST(total_deaths AS INT)) AS death_count
 FROM CovidDeaths
@@ -69,13 +77,6 @@ CREATE VIEW Total_deaths_continents AS
 SELECT location, MAX(total_deaths) AS death_count
 FROM CovidDeaths
 WHERE location IN ('Africa', 'Asia', 'Europe', 'North America', 'South America', 'Australia', 'Oceania')
-GROUP BY location
-GO
-
-CREATE VIEW Total_deaths_income AS
-SELECT location, MAX(total_deaths) AS death_count
-FROM CovidDeaths
-WHERE location IN ('High income', 'Low income', 'Lower middle income', 'Upper middle income')
 GROUP BY location
 GO
 
@@ -121,3 +122,24 @@ AND cv.date = cd.date
 GROUP BY cv.location
 GO
 
+--By income
+CREATE VIEW Total_deaths_income AS
+SELECT location, MAX(total_deaths) AS death_count
+FROM CovidDeaths
+WHERE location IN ('High income', 'Low income', 'Lower middle income', 'Upper middle income')
+GROUP BY location
+GO
+
+CREATE VIEW Total_cases_income AS
+SELECT location, MAX(total_cases) AS cases_count
+FROM CovidDeaths
+WHERE location IN ('High income', 'Low income', 'Lower middle income', 'Upper middle income')
+GROUP BY location
+GO
+
+CREATE VIEW Total_vaccinations_income AS
+SELECT location, MAX(total_vaccinations) AS vaccinations_count
+FROM CovidVaccinations
+WHERE location IN ('High income', 'Low income', 'Lower middle income', 'Upper middle income')
+GROUP BY location
+GO
