@@ -26,6 +26,8 @@ SET
 
 -- Alter column data types
 ALTER TABLE CovidDeaths
+ALTER COLUMN population DECIMAL(18,2) NULL;
+ALTER TABLE CovidDeaths
 ALTER COLUMN total_cases DECIMAL(18,2) NULL;
 ALTER TABLE CovidDeaths
 ALTER COLUMN new_cases DECIMAL(18,2) NULL;

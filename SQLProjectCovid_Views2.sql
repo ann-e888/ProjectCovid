@@ -95,3 +95,29 @@ FROM CovidDeaths
 WHERE location IN ('Africa', 'Asia', 'Europe', 'North America', 'South America', 'Australia', 'Oceania')
 GROUP BY location
 GO
+
+CREATE VIEW Death_rate AS
+SELECT MAX(total_deaths)/MAX(total_cases)*100 as death_percentage
+FROM CovidDeaths
+WHERE location = 'World'
+GO
+
+CREATE VIEW Vaccination_rate AS
+SELECT MAX(cv.people_fully_vaccinated)/MAX(cd.population)*100 as vaccination_percentage
+FROM CovidVaccinations cv
+JOIN CovidDeaths cd
+ON cv.location = cd.location
+AND cv.date = cd.date
+WHERE cv.location = 'World'
+GO
+
+CREATE VIEW Vaccination_rate_location AS
+SELECT cv.location, 
+MAX(cv.people_fully_vaccinated)/MAX(cd.population)*100 as vaccination_percentage_location
+FROM CovidVaccinations cv
+JOIN CovidDeaths cd
+ON cv.location = cd.location
+AND cv.date = cd.date
+GROUP BY cv.location
+GO
+
